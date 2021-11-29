@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    container_name: mongo-fullstack-api
+    image: mongo:5.0
+    user: $UID
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./.docker/data/db/:/data/db/
+      - ./.docker/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro

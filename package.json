@@ -1,0 +1,46 @@
+{
+  "author": "Titux Metal (DEV) <github@lgdweb.fr>",
+  "description": "Advanced NodeJS Authentication Workflow Api (including password reset and authorizations)",
+  "main": "index.js",
+  "name": "20211123-mern-authentication-api",
+  "license": "MIT",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "babel src -d dist",
+    "docker:down": "docker-compose down",
+    "docker:stop": "docker-compose stop",
+    "docker:up": "mkdir -p .docker/data/{db,log} && docker-compose up -d",
+    "prebuild": "rm -rf dist",
+    "prewatch": "yarn docker:up",
+    "start": "yarn build && node ./dist/index.js",
+    "testing": "env-cmd -f test.env jest --watch-all",
+    "watch": "env-cmd babel-watch -L src/index.js"
+  },
+  "dependencies": {
+    "@lgdweb/common-express-helpers": "^2.0.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.13.0",
+    "http-errors": "^1.8.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.13"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "babel-watch": "^7.6.0",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.3.0",
+    "eslint-config-kentcdodds": "^19.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "prettier": "^2.5.0"
+  }
+}
