@@ -1,9 +1,19 @@
+import { authService, userService } from '~/services'
+
 const login = (req, res) => {
   res.status(200).json({ message: 'Auth Controller => login' })
 }
 
-const register = (req, res) => {
-  res.status(200).json({ message: 'Auth Controller => register' })
+const register = async ({ body, session }, res) => {
+  const user = await userService.add(body)
+  const token = await authService.getTokenAndCreateSession(session, user.id)
+  const response = {
+    info: 'POST /api/auth/register',
+    message: 'User has been successfully registered.',
+    data: { user, token }
+  }
+
+  res.status(201).json(response)
 }
 
 const forgot = (req, res) => {
