@@ -1,5 +1,6 @@
 import HttpError from 'http-errors'
 
+import { compareHashString } from '~/helpers'
 import { User } from '~/models'
 
 const add = async ({ email, password, username }) => {
@@ -14,4 +15,16 @@ const add = async ({ email, password, username }) => {
   return newUser
 }
 
-export default { add }
+const checkCredentials = async ({ email = null, password = null }) => {
+  const user = await User.findOne({ email })
+
+  const isMatch = await compareHashString({ hashedString: user?.password, string: password })
+
+  if (!user || !isMatch) {
+    throw new HttpError(404, { reason: 'Incorrect credentials' })
+  }
+
+  return user
+}
+
+export default { add, checkCredentials }
