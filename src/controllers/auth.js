@@ -1,4 +1,7 @@
+import { requestValidator } from '@lgdweb/common-express-helpers'
+
 import { authService, userService } from '~/services'
+import { userValidator } from '~/validation'
 
 const login = (req, res) => {
   res.status(200).json({ message: 'Auth Controller => login' })
@@ -24,4 +27,9 @@ const reset = (req, res) => {
   res.status(200).json({ message: 'Auth Controller => reset' })
 }
 
-export default { forgot, login, register, reset }
+export default {
+  forgot,
+  login,
+  register: [requestValidator(userValidator.register), register],
+  reset
+}
