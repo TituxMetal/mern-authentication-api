@@ -21,10 +21,20 @@ const checkCredentials = async ({ email = null, password = null }) => {
   const isMatch = await compareHashString({ hashedString: user?.password, string: password })
 
   if (!user || !isMatch) {
-    throw new HttpError(404, { reason: 'Incorrect credentials' })
+    throw new HttpError(404, { reason: 'Incorrect credentials.' })
   }
 
   return user
 }
 
-export default { add, checkCredentials }
+const details = async (value = '', field = '_id') => {
+  const userDetails = await User.findOne({ [field]: value })
+
+  if (!userDetails) {
+    throw new HttpError(404, { reason: 'No user found.' })
+  }
+
+  return userDetails
+}
+
+export default { add, checkCredentials, details }
