@@ -43,7 +43,8 @@ const userValidator = {
     passwordField,
     requiredField('username'),
     usernameField
-  ]
+  ],
+  update: [emailField, usernameField, passwordField]
 }
 
 export default userValidator
