@@ -37,4 +37,24 @@ const details = async (value = '', field = '_id') => {
   return userDetails
 }
 
-export default { add, checkCredentials, details }
+const update = async (userId, updatedUser = {}) => {
+  if (await User.exists({ email: updatedUser.email })) {
+    const message = { msg: 'One or more fields already exists.' }
+
+    throw new HttpError(422, { reason: [message] })
+  }
+
+  const user = await User.findById(userId)
+
+  if (!user) {
+    throw new HttpError(404, { reason: 'No user found.' })
+  }
+
+  Object.assign(user, { ...updatedUser })
+
+  await user.save()
+
+  return user
+}
+
+export default { add, checkCredentials, details, update }
