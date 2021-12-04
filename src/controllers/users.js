@@ -1,7 +1,7 @@
 import { requestValidator } from '@lgdweb/common-express-helpers'
 
 import { userService } from '~/services'
-import { objectIdValidator } from '~/validation'
+import { objectIdValidator, userValidator } from '~/validation'
 
 const getAll = (req, res) => {
   res.status(200).json({ message: 'Users Controller => getAll' })
@@ -16,8 +16,18 @@ const getSingle = async ({ params }, res) => {
   res.status(200).json(response)
 }
 
-const update = (req, res) => {
-  res.status(200).json({ message: 'Users Controller => update' })
+const update = async ({ body, params }, res) => {
+  const userId = params.userId
+  const user = await userService.update(userId, body)
+
+  const response = {
+    info: 'PUT /api/users/:userId',
+    params: userId,
+    message: 'User has been successfully updated',
+    data: user
+  }
+
+  res.status(200).json(response)
 }
 
 const remove = (req, res) => {
@@ -28,5 +38,9 @@ export default {
   getAll,
   getSingle: [requestValidator(objectIdValidator('userId')), getSingle],
   remove,
-  update
+  update: [
+    requestValidator(objectIdValidator('userId')),
+    requestValidator(userValidator.update),
+    update
+  ]
 }
