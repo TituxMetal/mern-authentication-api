@@ -18,3 +18,6 @@ export const compareHashString = async ({ hashedString = '', string = '' }) =>
   compare(stringToHex(string), hashedString)
 
 export const generateToken = async (data = {}) => jwt.sign(data, jwtSecret)
+
+export const verifyToken = (token = '') =>
+  jwt.verify(token, jwtSecret, (err, decoded) => (err && false) || decoded)
