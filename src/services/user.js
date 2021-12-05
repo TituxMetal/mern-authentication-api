@@ -67,4 +67,21 @@ const remove = async (userId = '') => {
   return user
 }
 
-export default { add, checkCredentials, details, remove, update }
+const resetPassword = async (resetToken, newPassword) => {
+  const user = await User.findOne({ [resetToken.token]: resetToken })
+
+  if (!user) {
+    throw new HttpError(404, { reason: 'No user found.' })
+  }
+
+  if (user.resetToken.expire < Date.now()) {
+    await update(user.id, { resetToken: { token: null, expire: null } })
+
+    throw new HttpError(401, { reason: 'Invalid reset token.' })
+  }
+  const updatedUser = { resetToken: { token: null, expire: null }, password: newPassword }
+
+  await update(user.id, updatedUser)
+}
+
+export default { add, checkCredentials, details, remove, resetPassword, update }
