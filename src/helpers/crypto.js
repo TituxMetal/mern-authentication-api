@@ -1,10 +1,12 @@
 import { compare, genSalt, hash } from 'bcryptjs'
-import { createHash } from 'crypto'
+import { createHash, randomBytes } from 'crypto'
 import jwt from 'jsonwebtoken'
 
 import { CRYPTO_WORK_FACTOR, jwtSecret } from '~/config'
 
 const stringToHex = (string = '') => createHash('sha256').update(string).digest('hex')
+
+export const generateRandomString = () => stringToHex(randomBytes(32).toString('hex'))
 
 export const stringToHash = async (string = '') => {
   if (typeof string !== 'string') {
