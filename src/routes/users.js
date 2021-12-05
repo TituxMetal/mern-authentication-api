@@ -8,6 +8,6 @@ const router = new Router()
 router.get('/', usersController.getAll)
 router.get('/:userId', usersController.getSingle)
 router.put('/:userId', isAuthenticated, usersController.update)
-router.delete('/:userId', usersController.remove)
+router.delete('/:userId', isAuthenticated, usersController.remove)
 
 export default router
