@@ -1,6 +1,7 @@
 import HttpError from 'http-errors'
 
-import { generateToken } from '~/helpers'
+import { RESET_TOKEN_EXPIRE } from '~/config'
+import { generateRandomString, generateToken } from '~/helpers'
 
 const createSessionWithToken = (session, token = null) => {
   if (!token) {
@@ -10,6 +11,13 @@ const createSessionWithToken = (session, token = null) => {
   }
 
   Object.assign(session, { token, createdAt: Date.now() })
+}
+
+const generateResetToken = () => {
+  const token = generateRandomString()
+  const expire = Date.now() + RESET_TOKEN_EXPIRE
+
+  return { token, expire }
 }
 
 const getTokenAndCreateSession = async (session, userId = null) => {
@@ -27,4 +35,4 @@ const getTokenAndCreateSession = async (session, userId = null) => {
   return token
 }
 
-export default { getTokenAndCreateSession }
+export default { generateResetToken, getTokenAndCreateSession }
