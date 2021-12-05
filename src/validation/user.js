@@ -35,6 +35,7 @@ const usernameField = body('username')
   .optional()
 
 const userValidator = {
+  forgot: [requiredField('email'), emailField],
   login: [requiredField('email'), requiredField('password')],
   register: [
     requiredField('email'),
@@ -44,6 +45,7 @@ const userValidator = {
     requiredField('username'),
     usernameField
   ],
+  reset: [requiredField('password'), passwordField],
   update: [emailField, usernameField, passwordField]
 }
 
