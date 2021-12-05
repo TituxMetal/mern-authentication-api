@@ -30,14 +30,23 @@ const update = async ({ body, params }, res) => {
   res.status(200).json(response)
 }
 
-const remove = (req, res) => {
-  res.status(200).json({ message: 'Users Controller => remove' })
+const remove = async ({ params }, res) => {
+  const userId = params.userId
+  const user = await userService.remove(userId)
+
+  const response = {
+    info: 'DELETE /api/users/:userId',
+    message: 'User has been successfully deleted.',
+    data: user
+  }
+
+  res.status(200).json(response)
 }
 
 export default {
   getAll,
   getSingle: [requestValidator(objectIdValidator('userId')), getSingle],
-  remove,
+  remove: [requestValidator(objectIdValidator('userId')), remove],
   update: [
     requestValidator(objectIdValidator('userId')),
     requestValidator(userValidator.update),
