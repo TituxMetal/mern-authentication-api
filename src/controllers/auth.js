@@ -27,17 +27,40 @@ const register = async ({ body, session }, res) => {
   res.status(201).json(response)
 }
 
-const forgot = (req, res) => {
-  res.status(200).json({ message: 'Auth Controller => forgot' })
+const forgot = async ({ body }, res) => {
+  const { email } = body
+  const user = await userService.details(email, 'email')
+  const { token, expire } = await authService.generateResetToken()
+
+  const updatedUser = await userService.update(user.id, { resetToken: { token, expire } })
+
+  const response = {
+    info: 'POST /api/auth/forgot',
+    message: 'Please click on the link in the email you received.',
+    link: `http://localhost:5000/api/auth/${token}`,
+    data: updatedUser
+  }
+
+  res.status(200).json(response)
 }
 
-const reset = (req, res) => {
-  res.status(200).json({ message: 'Auth Controller => reset' })
+const reset = async ({ body, params }, res) => {
+  const resetToken = params.resetToken
+  const { password } = body
+
+  await userService.resetPassword(resetToken, password)
+
+  const response = {
+    info: 'PUT /api/auth/:resetToken',
+    message: 'Your password has been successfully updated.'
+  }
+
+  res.status(200).json(response)
 }
 
 export default {
-  forgot,
+  forgot: [requestValidator(userValidator.forgot), forgot],
   login: [requestValidator(userValidator.login), login],
   register: [requestValidator(userValidator.register), register],
-  reset
+  reset: [requestValidator(userValidator.reset), reset]
 }
