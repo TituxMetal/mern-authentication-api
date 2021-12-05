@@ -57,4 +57,14 @@ const update = async (userId, updatedUser = {}) => {
   return user
 }
 
-export default { add, checkCredentials, details, update }
+const remove = async (userId = '') => {
+  const user = await User.findOneAndRemove({ _id: userId })
+
+  if (!user) {
+    throw new HttpError(404, { reason: 'No user found.' })
+  }
+
+  return user
+}
+
+export default { add, checkCredentials, details, remove, update }
