@@ -34,10 +34,11 @@ const forgot = async ({ body }, res) => {
 
   const updatedUser = await userService.update(user.id, { resetToken: { token, expire } })
 
+  await authService.sendResetToken(user.email, token)
+
   const response = {
     info: 'POST /api/auth/forgot',
     message: 'Please click on the link in the email you received.',
-    link: `http://localhost:5000/api/auth/${token}`,
     data: updatedUser
   }
 
