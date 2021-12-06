@@ -1,7 +1,7 @@
 import HttpError from 'http-errors'
 
-import { RESET_TOKEN_EXPIRE } from '~/config'
-import { generateRandomString, generateToken } from '~/helpers'
+import { hostUrl, port, RESET_TOKEN_EXPIRE } from '~/config'
+import { generateRandomString, generateToken, sendEmail } from '~/helpers'
 
 const createSessionWithToken = (session, token = null) => {
   if (!token) {
@@ -35,4 +35,13 @@ const getTokenAndCreateSession = async (session, userId = null) => {
   return token
 }
 
-export default { generateResetToken, getTokenAndCreateSession }
+const sendResetToken = async (to, resetToken) => {
+  const subject = 'Password reset request'
+  const text = `
+  <h1>You have requested a password reset</h1>
+  <p>Please make a PUT request to the following url: ${hostUrl}:${port}/api/auth/${resetToken}</p>`
+
+  return sendEmail({ to, subject, text })
+}
+
+export default { generateResetToken, getTokenAndCreateSession, sendResetToken }
