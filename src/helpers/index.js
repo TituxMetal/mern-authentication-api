@@ -1,1 +1,2 @@
 export * from './crypto'
+export { default as sendEmail } from './sendEmail'
