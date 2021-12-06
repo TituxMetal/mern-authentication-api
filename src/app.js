@@ -5,7 +5,7 @@ import express from 'express'
 import session from 'express-session'
 import 'express-async-errors'
 
-import { port, sessionOptions } from '~/config'
+import { hostUrl, port, sessionOptions } from '~/config'
 import { authRoutes, usersRoutes } from '~/routes'
 
 export const createApp = () => {
@@ -24,7 +24,7 @@ export const createApp = () => {
   app.use(errorHandler)
 
   const server = app.listen(port, '0.0.0.0', () =>
-    console.info(`Server is listening on http://localhost:${port}`)
+    console.info(`Server is listening on ${hostUrl}:${port}`)
   )
 
   return server
